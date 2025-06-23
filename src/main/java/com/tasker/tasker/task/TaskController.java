@@ -58,7 +58,6 @@ public class TaskController {
     // *** POST /todos (create new task)
     @PostMapping
     public ResponseEntity<String> postMethodName(@Valid @RequestBody CreateTaskDTO entity) {
-        // TODO: process POST request
         System.out.println(entity.getTask());
         String savedTask = this.taskService.createTask(entity);
         return new ResponseEntity<>(savedTask, HttpStatus.CREATED);

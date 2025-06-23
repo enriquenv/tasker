@@ -10,22 +10,14 @@ public class TaskRepository {
 
     ArrayList<String> tasks = new ArrayList<>(Arrays.asList("Wake up", "Wash the dishes"));
 
-    public String save(String task) {
-        this.tasks.add(task);
-        System.out.println("Tasks saved: " + tasks);
-        return task;
-    }
-
     public ArrayList<String> findAll() {
         return this.tasks;
     }
 
-    public boolean deleteByIndex(int index) {
-        if (index < 0 || index >= tasks.size()) {
-            return false;
-        }
-        tasks.remove(index);
-        return true;
+    public String save(String task) {
+        this.tasks.add(task);
+        System.out.println("Tasks saved: " + tasks);
+        return task;
     }
 
     public boolean updateByIndex(int index, String newTask) {
@@ -33,6 +25,14 @@ public class TaskRepository {
             return false;
         }
         tasks.set(index, newTask);
+        return true;
+    }
+
+    public boolean deleteByIndex(int index) {
+        if (index < 0 || index >= tasks.size()) {
+            return false;
+        }
+        tasks.remove(index);
         return true;
     }
 }
