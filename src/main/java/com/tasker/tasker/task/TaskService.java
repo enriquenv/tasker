@@ -56,11 +56,11 @@ public class TaskService {
         Task taskFromDB = foundTask.get();
 
         if (data.getTask() != null) {
-            taskFromDB.setTask(data.getTask());
+            taskFromDB.setTask(data.getTask().trim());
         }
 
         if (data.getDueDate() != null) {
-            taskFromDB.setDueDate(data.getDueDate());
+            taskFromDB.setDueDate(data.getDueDate().trim());
         }
 
         if (data.getIsCompleted() != null) {
