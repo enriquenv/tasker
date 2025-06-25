@@ -11,6 +11,8 @@ public class UpdateTaskDTO {
 
     private Boolean isCompleted;
 
+    private Long categoryId;
+
     public String getTask() {
         return task;
     }
@@ -33,6 +35,14 @@ public class UpdateTaskDTO {
 
     public void setIsCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

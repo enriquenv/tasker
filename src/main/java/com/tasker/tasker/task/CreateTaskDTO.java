@@ -13,7 +13,9 @@ public class CreateTaskDTO {
 
     private String dueDate;
 
-    private boolean isCompleted;
+    private Boolean isCompleted = false;
+
+    private Long categoryId;
 
     public String getTask() {
         return task;
@@ -31,12 +33,20 @@ public class CreateTaskDTO {
         this.dueDate = dueDate;
     }
 
-    public boolean isCompleted() {
+    public Boolean getIsCompleted() {
         return isCompleted;
     }
 
-    public void setCompleted(boolean isCompleted) {
+    public void setIsCompleted(Boolean isCompleted) {
         this.isCompleted = isCompleted;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
 }

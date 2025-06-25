@@ -39,7 +39,7 @@ public class CategoryService {
         this.categoryRepository.deleteById(id);
     }
 
-    // *** For PATCH /categories/:id (update specific category)
+    // *** For PUT /categories/:id (update specific category)
     public Optional<Category> updateById(Long id, CreateCategoryDTO data) {
         Optional<Category> foundCategory = this.findById(id);
         if (foundCategory.isEmpty()) {

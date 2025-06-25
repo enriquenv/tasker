@@ -6,7 +6,7 @@ import java.util.Optional;
 
 //import javax.naming.NameNotFoundException;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+//import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 //import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 
@@ -39,11 +41,16 @@ public class TaskController {
     }
     // <---- DEPENDENCY INJECTION
 
-    // *** GET /todos (get all tasks)
+    // *** GET /todos (get all tasks OR filter by category)
     @GetMapping
-    public ResponseEntity<List<Task>> getMethodName() {
-        List<Task> allTasks = this.taskService.findAll();
-        return new ResponseEntity<>(allTasks, HttpStatus.OK);
+    public ResponseEntity<List<Task>> getAllTasks(@RequestParam(required = false) String category) {
+        List<Task> tasks;
+        if (category != null && !category.isBlank()) {
+            tasks = this.taskService.findByCategory(category);
+        } else {
+            tasks = this.taskService.findAll();
+        }
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     // *** GET /todos/:id (get specific task)
@@ -67,11 +74,11 @@ public class TaskController {
 
     // *** DELETE /todos/:id (delete specific task)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMethodName(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteMethodName(@PathVariable Long id) {
         Optional<Task> foundTask = this.taskService.findById(id);
         if (foundTask.isPresent()) {
             this.taskService.deleteById(id);
-            return new ResponseEntity<String>("Task deleted", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -79,11 +86,10 @@ public class TaskController {
 
     // *** PATCH /todos/:id (update specific task)
     @PatchMapping("/{id}")
-    public ResponseEntity<Task> patchMethodName(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO data)
-            throws NotFoundException {
+    public ResponseEntity<Task> patchMethodName(@PathVariable Long id, @Valid @RequestBody UpdateTaskDTO data) {
         Optional<Task> result = this.taskService.updateById(id, data);
 
-        Task updated = result.orElseThrow(() -> new NotFoundException());
+        Task updated = result.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }

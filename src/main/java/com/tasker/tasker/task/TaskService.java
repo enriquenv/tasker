@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.tasker.tasker.category.Category;
+import com.tasker.tasker.category.CategoryRepository;
+
 //import jakarta.validation.Valid;
 
 @Service
@@ -13,9 +16,11 @@ public class TaskService {
 
     // DEPENDENCY INJECTION ---->
     private TaskRepository taskRepository;
+    private CategoryRepository categoryRepository;
 
-    TaskService(TaskRepository taskRepository) {
+    TaskService(TaskRepository taskRepository, CategoryRepository categoryRepository) {
         this.taskRepository = taskRepository;
+        this.categoryRepository = categoryRepository;
     }
     // <---- DEPENDENCY INJECTION
 
@@ -35,9 +40,16 @@ public class TaskService {
         Task newTask = new Task();
         newTask.setTask(data.getTask().trim());
         newTask.setDueDate(data.getDueDate());
-        newTask.setIsCompleted(data.isCompleted());
-        Task savedTask = this.taskRepository.save(newTask);
-        return savedTask;
+        newTask.setIsCompleted(data.getIsCompleted());
+
+        if (data.getCategoryId() != null) {
+            Optional<Category> category = this.categoryRepository.findById(data.getCategoryId());
+            if (category.isPresent()) {
+                newTask.setCategory(category.get());
+            }
+        }
+
+        return this.taskRepository.save(newTask);
     }
 
     // *** For DELETE /todos/:id (delete specific task)
@@ -50,7 +62,7 @@ public class TaskService {
         Optional<Task> foundTask = this.findById(id);
 
         if (foundTask.isEmpty()) {
-            return foundTask;
+            return Optional.empty();
         }
 
         Task taskFromDB = foundTask.get();
@@ -67,8 +79,20 @@ public class TaskService {
             taskFromDB.setIsCompleted(data.getIsCompleted());
         }
 
+        if (data.getCategoryId() != null) {
+            Optional<Category> category = this.categoryRepository.findById(data.getCategoryId());
+            if (category.isPresent()) {
+                taskFromDB.setCategory(category.get());
+            }
+        }
+
         this.taskRepository.save(taskFromDB);
         return Optional.of(taskFromDB);
+    }
+
+    // *** For GET /todos?category={} (get all tasks with a specific category)
+    public List<Task> findByCategory(String categoryName) {
+        return this.taskRepository.findByCategory_Category(categoryName);
     }
 
     /*

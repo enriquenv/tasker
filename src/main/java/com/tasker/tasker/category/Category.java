@@ -1,10 +1,16 @@
 package com.tasker.tasker.category;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tasker.tasker.task.Task;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,6 +22,10 @@ public class Category {
 
     @Column
     private String category;
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private Set<Task> tasks;
 
     public Long getId() {
         return id;
