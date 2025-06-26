@@ -1,6 +1,5 @@
 package com.tasker.tasker.task;
 
-//import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.tasker.tasker.category.Category;
 import com.tasker.tasker.category.CategoryRepository;
-
-//import jakarta.validation.Valid;
 
 @Service
 public class TaskService {
@@ -94,32 +91,5 @@ public class TaskService {
     public List<Task> findByCategory(String categoryName) {
         return this.taskRepository.findByCategory_Category(categoryName);
     }
-
-    /*
-     * public String defaultTask() {
-     * return "This is a default to do task.";
-     * }
-     * 
-     * public String taskByWord(String word) {
-     * return "You need to do " + word + ".";
-     * }
-     * 
-     * 
-     * public String createTask(CreateTaskDTO entity) {
-     * String task = entity.getTask();
-     * return this.taskRepository.save(task);
-     * // throw new
-     * UnsupportedOperationException("Unimplemented method 'createTask'");
-     * }
-     * 
-     * 
-     * public boolean updateTaskByIndex(int index, String newTask) {
-     * return this.taskRepository.updateByIndex(index, newTask);
-     * }
-     * 
-     * public boolean deleteTaskByIndex(int index) {
-     * return this.taskRepository.deleteByIndex(index);
-     * }
-     */
 
 }
